@@ -14,8 +14,16 @@ const current = queue[index] ?? null;
 useEffect(() => {
 if (!current) return;
 const audio = audioRef.current;
+if (!current.previewUrl) {
+  audio.pause();
+  audio.removeAttribute("src");
+  setIsPlaying(false);
+  setProgress(0);
+  return;
+}
 audio.src = current.previewUrl;
-audio.play().catch(() => {});
+audio.load();
+audio.play().catch(() => setIsPlaying(false));
 }, [current]);
 // Wire up audio events
 useEffect(() => {
@@ -24,6 +32,11 @@ const onTime = () =>
 setProgress(audio.duration ? audio.currentTime / audio.duration : 0);
 const onPlay = () => setIsPlaying(true);
 const onPause = () => setIsPlaying(false);
+const onError = () => {
+  setIsPlaying(false);
+  setProgress(0);
+  audio.pause();
+};
 const onEnd = () => {
 if (index < queue.length - 1) setIndex(index + 1);
 else setIsPlaying(false);
@@ -31,11 +44,13 @@ else setIsPlaying(false);
 audio.addEventListener("timeupdate", onTime);
 audio.addEventListener("play", onPlay);
 audio.addEventListener("pause", onPause);
+audio.addEventListener("error", onError);
 audio.addEventListener("ended", onEnd);
 return () => {
 audio.removeEventListener("timeupdate", onTime);
 audio.removeEventListener("play", onPlay);
 audio.removeEventListener("pause", onPause);
+audio.removeEventListener("error", onError);
 audio.removeEventListener("ended", onEnd);
 };
 }, [index, queue]);

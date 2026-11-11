@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import TrackList from "../components/TrackList.jsx";
+import AlbumPlayback from "../components/AlbumPlayback.jsx";
 import StatusSelect from "../components/StatusSelect.jsx";
 import Stars from "../components/Stars.jsx";
 import { useCollection } from "../context/CollectionContext.jsx";
@@ -77,7 +77,7 @@ collection</button>
 )}
 </div>
 </div>
-<TrackList tracks={tracks} />
+<AlbumPlayback title={album.collectionName} artist={album.artistName} tracks={tracks} />
 </section>
 );
 }

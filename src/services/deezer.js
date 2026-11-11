@@ -1,5 +1,4 @@
-// Lowercase and drop tags like (Deluxe) and punctuation so titles compare
-fairly
+// Lowercase and drop tags like (Deluxe) and punctuation so titles compare fairly
 const norm = (s = "") =>
 s.toLowerCase().replace(/\(.*?\)|\[.*?\]/g, "").replace(/[^a-z0-9]/g, "");
 export async function findDeezerAlbumId(title, artist) {
